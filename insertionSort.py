@@ -1,7 +1,7 @@
 
 
 def insertionSort(A):
-    for i in range(1, len(A)):
+    for i in range(len(A)):
         x = A[i] #ponteiro auxiliar
         j = i - 1 #ponteiro de verificação
         while j >= 0 and x < A[j]:
