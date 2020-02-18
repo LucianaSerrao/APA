@@ -19,7 +19,7 @@ class LerArquivo{
     int nVeiculos;
     int capacidadeDoVeiculo;
     string rota;
-    vector<vector <int>> distanciaMatriz;
+    vector<vector <int> > distanciaMatriz;
     vector<int> demanda;
 
     LerArquivo(){}

@@ -11,7 +11,10 @@ LerArquivo::LerArquivo(char* rotaDaInstancia){
     this->nVeiculos = 0;
     this->capacidadeDoVeiculo = 0;
     
-    if(!this->arquivoDeInstancia){cout<<"Não foi possível abrir o arquivo!"<<endl;exit(-1);}
+    if(!this->arquivoDeInstancia){
+        cout<<"Não foi possível abrir o arquivo!"<<endl;
+        exit(-1);
+    }
     
     char name[64];
 
@@ -36,6 +39,10 @@ LerArquivo::LerArquivo(char* rotaDaInstancia){
         }
     }
     // fclose(instanceFile);
+}
+
+LerArquivo::~LerArquivo(){
+    fclose(this->arquivoDeInstancia);
 }
 
 
