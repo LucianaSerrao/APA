@@ -1,0 +1,33 @@
+Algoritmo de Kruskal + HeapSort e CountingSort
+
+O projeto consiste de três arquivos python: sort.py, kruskal.py e main.py
+
+--- sort.py
+
+Contém as funções heap_sort (implementada com as funções max_heapify e heap_sort) e counting_sort. Ambas foram escritas esperando como entrada um vetor de vetores (da forma [vértice, vértice, peso]), ordenando pela terceira entrada (o peso da aresta).
+
+O argumento de ambas é apenas o array, e devolvem o array ordenado.
+
+Exemplo de uso:
+a = [[3,5,8], [8,9,11], [7, 4, 4], [2, 5, 7]] #esse é o formato esperado. Vai ordenar pela terceira entrada
+a_heap = heap_sort(a)
+a_count = counting_sort(a)
+print(a_heap) # ou print(a_count)
+
+Output: [[7, 4, 4], [2, 5, 7], [3, 5, 8], [8, 9, 11]]
+
+-- kruskal.py
+
+Contém a classe GraphXY, que representa um grafo (armazenado como um dicionário) onde cada chave têm como valores as coordenadas X e Y.
+
+A classe têm os métodos add_vertex (adicionar um vértice), generate_edges (usando itertools, acha todas as combinações de arestas: n(n-1)/2) e add_weights (calcula os pesos para cada aresta através da distância euclidiana), além das funções auxiliares find e union, e a própria função kruskal, que realiza o algoritmo - ela tem o parâmetro sort_method, que regula o método de ordenação ('heap' ou 'counting').
+
+A função kruskal printa todo o caminho (origem -- destino == peso) e a soma de todas as arestas.
+
+-- main.py
+
+Script para testar o código, importando os dois scripts acima. Basta instanciar um GraphXY, populá-lo a partir dos arquivos txt (para isso usou-se o pandas), gerar todas as arestas com generate_edges e calcular os pesos com add_weights. Então é só rodar kruskal com o método de sort preferido e observar o tempo de execução.
+
+Portanto, para utilizar o código basta alterar a linha de leitura do arquivo (graphs = pd.read_csv ...) para mudar o input, e a linha de chamada do kruskal (g.kruskal(sort_method=<>)) com o método de sorting escolhido ('heap' ou 'counting').
+
+E então executar no terminal com: python3 main.py
