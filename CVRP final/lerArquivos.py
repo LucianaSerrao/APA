@@ -1,17 +1,23 @@
- o def ler_arquivo():
-    listaStrings = []  #salva cada linha do arquivo em uma lista
-    #===============================================================================
-    #                  LER O ARQUIVO E SALVA EM UMA LISTA DE STRINGS
-    arq1 = open(r"C:.txt", "r")#colocar o caminho do arquivo aqui
+import sys
 
-    for linha in arq1:
-        listaStrings.append(linha.strip())
+def ler_arquivo():
 
-    arq1.close()
-    #================================================================================
-    #               SEPARA A LISTA DE STRING EM LISTAS LISTAS ESPECÍFICAS
+       '''
+       Salva cada linha do arquivo em uma lista  (ln 12)
+       Le o arquivo e salva numa lista de string (ln 14 - ln 19)
+       Separa a lista de string em listas específicas (ln 20 - ln 36)
 
-    listaDetalhada = []     #contem uma lista apenas com os dados finais
+       '''
+
+    
+    listaStrings = []  
+                      
+    file_name = sys.argv[1]
+    with open(file_name, "r") as arq1:
+        for linha in arq1:
+            listaStrings.append(linha.strip())              
+
+    listaDetalhada = []
 
     for linha in listaStrings:    
         listaDetalhada.append(linha.split())

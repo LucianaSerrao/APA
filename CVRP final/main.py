@@ -2,7 +2,7 @@ from lerArquivos import *
 from funcoes import *
 from copy import deepcopy
 
-"""         ALGORITMO    
+'''         ALGORITMO    
     1. PROCURAR DESTINO
         1.1 PROCURA CASA MAIS PRÓXIMA
         1.2 VER SE É COMPATÍVEL COM A CAPACIDADE RESTANTE DO CARRO
@@ -14,7 +14,7 @@ from copy import deepcopy
         2.2 COLOCA A DEMANDA DA CASA PARA ZERO
         2.3 SOMAR DISTÂNCIA PERCORRIDA
     3. REPETIR
-"""
+'''
 
 #SALVA O ARQUIVO EM UMA LISTA
 arq = ler_arquivo()
