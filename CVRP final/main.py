@@ -16,52 +16,70 @@ from copy import deepcopy
     3. REPETIR
 '''
 
-#SALVA O ARQUIVO EM UMA LISTA
+#salva o arquivo em uma lista
 arq = ler_arquivo()
 
-#SEPARA DOS DADOS DOS ARQUIVOS EM LISTAS ESPECÍFICAS
+#separa os dados dos arquivos em listas específicas
 dados = arq[0]
 casas = arq[1]
 rotas = arq[2]
 
-#VARIÁVEIS DE CONTROLE
+#variaveis de controle
 distancia = 0
 carro = 0
+
 #imprimirDadosDoArquivo(dados, casas, rotas)
 resto = contarEntregas(casas)
 print ("\n============================================")
 print("             FALTAM {} ENTREGAS".format(resto))
 ("============================================\n")
 
-"""          # INICIO DO CÓDIGO DE ENTREGA DE PACOTES                """
+'''         
+Entrega de pacotes
 
-Enderecos = []  #Contem todas as rotas encontradas pelo vizinho mais próximo || para todos os carros
+Contem todas as rotas encontradas pelo vizinho mais proximo // para todos os carros (ln 56)
+
+Enquanto houver casa com demanda: adiciona mais um carro, reseta a posição de saída do carro, pega a capacidade direto do arquivo; (ln 59 - ln 62)
+
+Enquanto o carro tiver capacidade: salva a ultima posição do carro, caso não haja mais casa compatível; procura a posição da casa mais próxima,
+se houver casa mais proxima, diminui a capacidade do carro de acordo com a demanda que a casa solicitou. (ln 65 - ln 69)
+
+Soma a distância total percorrida e informa que a casa não precisa de mais entrega e marca a rota como já percorrida (ln 71 - ln 76)
+
+Se não houver casa mais próxima, soma a distância de volta para a empresa (ln 78 - ln 79)
+
+Informa quantos produtos ainda faltam ser entregues (ln 82)
+
+
+'''
+
+Enderecos = []  
 custoEnderecos = []
 
-while(resto > 0):  #ENQUANTO HOUVER CASA COM DEMANDA    
-    carro += 1                                                                                   #ADICIONA +1 CARRO
-    posCarro = [0, 0]                               #RESETA A POSIÇÃO DE SAIDA DO CARRO 
-    capacidade = int(dados[2][1])                   #PEGA A CAPACIDADE DIRETO DO ARQUIVO
+while(resto > 0):     
+    carro += 1                                                                                   
+    posCarro = [0, 0]                                
+    capacidade = int(dados[2][1])                   
     custoPorCarro = 0
     EnderecosPorCarro = [0]    
-    while(capacidade > 0):                                                                      #ENQUANTO O CARRO TIVER CAPACIDADE
-        ultimaPosicao = deepcopy(posCarro)                                                       #SALVA A ÚLTIMA POSIÇÃO DO CARRO, CASO NÃO HAJA MAIS CASA COMPATÍVEL
-        posCarro = procurarCasaMaisProxima(rotas, posCarro, casas, capacidade)                   #PROCURA A POSIÇÃO DA CASA MAIS PRÓXIMA
-        if(posCarro[1] >= 0):                                                                    #SE POSITIVO HÁ UMA CASA MAIS PRÓXIMA
-            capacidade = atualizarCapacidade(casas, posCarro[1], capacidade)                     #DIMINUI A CAPACIDADE DO CARRO DE ACORDO COM O QUE A CASA SOLICITOU
+    while(capacidade > 0):                                                                      
+        ultimaPosicao = deepcopy(posCarro)                                                       
+        posCarro = procurarCasaMaisProxima(rotas, posCarro, casas, capacidade)                   
+        if(posCarro[1] >= 0):                                                                    
+            capacidade = atualizarCapacidade(casas, posCarro[1], capacidade)                     
             EnderecosPorCarro.append(deepcopy(posCarro[1]))
-            distancia = somarDistancia(distancia, posCarro, rotas)                               #SOMA A DISTÂNCIA TOTAL PERCORRIDA          
-            demanda = atualizarDemanda(casas, posCarro[1])                                       #INFORMA QUE A CASA NÃO PRECISA DE MAIS ENTREGA
+            distancia = somarDistancia(distancia, posCarro, rotas)                                        
+            demanda = atualizarDemanda(casas, posCarro[1])                                      
             aux = deepcopy(posCarro)
             posCarro[0] = aux[1]
             posCarro[1] = aux[0]
-            #print(posCarro)                                                                                 #MARCA A ROTA COMO JÁ PERCORRIDA
+            #print(posCarro)                                                                                 
             custoPorCarro += int(rotas[ultimaPosicao[0]][ultimaPosicao[1]])
-        else:                                                                                    #SE NEGATIVO NÃO HÁ MAIS CASA COMPATÍVEL
-            distancia += int(rotas[ultimaPosicao[0]][ultimaPosicao[1]])                          #SOMA A DISTÂNCIA DE VOLTA PARA A EMPRESA
+        else:                                                                                    
+            distancia += int(rotas[ultimaPosicao[0]][ultimaPosicao[1]])                          
             custoPorCarro += int(rotas[ultimaPosicao[0]][ultimaPosicao[1]])
             break
-    resto = contarEntregas(casas)                                                    #INFORMA QUANTOS PRODUTOS AINDA FALTAM SER ENTREGUES
+    resto = contarEntregas(casas)                                                    
     EnderecosPorCarro.append(0)            
     custoEnderecos.append(deepcopy(custoPorCarro))
     Enderecos.append(deepcopy(EnderecosPorCarro))

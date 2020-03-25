@@ -8,14 +8,24 @@ def contarEntregas(demanda):
             resto += int(casas[1])
     return resto
 
-def procurarCasaMaisProxima(grafo, posCarro, casa, capacidade):    
-    casaMaisProxima = math.inf                                                              #infinito        
+def procurarCasaMaisProxima(grafo, posCarro, casa, capacidade):
+
+	'''
+	Analisa o grafo a partir da linha em que o carro se encontra (ln 23)
+	Procura a casa mais próxima que não seja ela mesma (ln 24)
+	Verifica se a demanda da casa é menor que a capacidade do veículo e se é maior que zero (ln 25)
+	Salva a distância da casa mais próxima (ln 26)
+	Salva a posição da coluna em que o carro se encontra (ln 27)
+
+        '''    
+    casaMaisProxima = math.inf                                                                      
     contador = 0                
-    for i in grafo[posCarro[0]]:                                                            #Analisa o grafo a partir da linha em que o carro se encontra
-        if ((int(i) > 0 ) and (int(i) < casaMaisProxima)):                                  # Procura casa mais próxima que não seja ela mesma
-            if(int(casa[contador][1]) <= capacidade and int(casa[contador][1]) > 0):        # Verifica se a demanda da casa é menor que a capacidade do veículo e é maior que zero              
-                casaMaisProxima = int(i)                                                    #Salva a Distância dda casa mais próxima
-                posCarro[1] = contador                                                      #Salva a posição da coluna em que o carro se encontra                   
+    for i in grafo[posCarro[0]]:                                
+        if ((int(i) > 0 ) and (int(i) < casaMaisProxima)):                                  
+            if(int(casa[contador][1]) <= capacidade and int(casa[contador][1]) > 0):                     
+                casaMaisProxima = int(i)                                                    
+                posCarro[1] = contador 
+                                                     
         contador += 1
     if(casaMaisProxima == float("inf")):
         posCarro[1] = -1        
@@ -55,22 +65,31 @@ def calcularRota(solucao, rota):
         destino = [solucao[m-1], solucao[m]]        
     return valor
 
-#calcula o custo da rota de um carro
+
 def calcularCusto(solucao, rota):
+
+''' Calcula o custo da rota de um carro '''
+
     custo = 0
     for i in range(1,len(solucao)):
         custo += int(rota[solucao[i-1]][solucao[i]])
     return custo
 
-#calcula o custo para todos os carros
+
 def calcularCustoTotal(listaSolucao, rota):
+
+''' Calcula o custo para todos os carros '''
+
     custoTotal = 0
     for lista in listaSolucao:
         custoTotal += calcularCusto(lista, rota)
     return custoTotal
     
-#pega 2 casas e coloca na melhor posição possível do vetor
+
 def opt2(solucao, custofinal, rota):
+
+''' Pega 2 casas e coloca na melhor posição possível do vetor '''
+
     melhorCusto = custofinal
     melhorSolucao = deepcopy(solucao)
     if(len(solucao)>4):
@@ -91,8 +110,11 @@ def opt2(solucao, custofinal, rota):
     return melhorSolucao
 
 
-#pega uma casa e a coloca na melhor posição possível do vetor
+
 def reinsertion(solucao, custofinal, rota):
+
+''' Pega uma casa e a coloca na melhor posição possível do vetor '''
+
     melhorCusto = custofinal
     melhorSolucao = deepcopy(solucao)
     if(len(solucao)>3):
@@ -110,8 +132,10 @@ def reinsertion(solucao, custofinal, rota):
     return melhorSolucao
 
 
-#retorna o melhor swap possível da rota
-def swap(solucao, custofinal, rota):       
+def swap(solucao, custofinal, rota): 
+
+''' Retorna o melhor swap possível da rota '''
+      
     melhorCusto = custofinal
     melhorSolucao = deepcopy(solucao)
 
@@ -131,8 +155,10 @@ def swapPositions(list, pos1, pos2):
     list[pos1], list[pos2] = list[pos2], list[pos1] 
     return list
 
-#funções para aplicar as paradas na lista completa de todos os carros
 def swapGeral(listaSolucao, rota):
+
+''' Funções para aplicar as paradas na lista completa de todos os carros '''
+
     listaAtualizada = []
     for lista in listaSolucao:
         listaAtualizada.append(swap(lista, calcularCusto(lista, rota), rota))
@@ -150,7 +176,13 @@ def reinsertionGeral(listaSolucao, rota):
         listaAtualizada.append(reinsertion(lista, calcularCusto(lista, rota), rota))
     return listaAtualizada
 
-def vnd(listaSolucao, rota): # Roda primeiro um reinsertion, repete até não melhorar mais, e depois sobe pra um swap, depois opt2 || volta pro reinsertion sempre que melhorar
+def vnd(listaSolucao, rota): 
+
+'''
+ Roda primeiro um reinsertion, repete até não melhorar mais, e depois sobe pra um swap, depois opt2 || volta pro reinsertion sempre que melhorar
+
+'''
+
     listaAuxiliar = deepcopy(listaSolucao)
     custoInicial = calcularCustoTotal(listaSolucao, rota)
     custoFinal = 0
