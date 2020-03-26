@@ -10,14 +10,14 @@ def contarEntregas(demanda):
 
 def procurarCasaMaisProxima(grafo, posCarro, casa, capacidade):
 
-	'''
-	Analisa o grafo a partir da linha em que o carro se encontra (ln 23)
-	Procura a casa mais próxima que não seja ela mesma (ln 24)
-	Verifica se a demanda da casa é menor que a capacidade do veículo e se é maior que zero (ln 25)
-	Salva a distância da casa mais próxima (ln 26)
-	Salva a posição da coluna em que o carro se encontra (ln 27)
+    '''
+    Analisa o grafo a partir da linha em que o carro se encontra (ln 23)
+    Procura a casa mais próxima que não seja ela mesma (ln 24)
+    Verifica se a demanda da casa é menor que a capacidade do veículo e se é maior que zero (ln 25)
+    Salva a distância da casa mais próxima (ln 26)
+    Salva a posição da coluna em que o carro se encontra (ln 27)
 
-    	'''    
+    '''    
     casaMaisProxima = math.inf                                                                      
     contador = 0                
     for i in grafo[posCarro[0]]:                                
@@ -68,7 +68,7 @@ def calcularRota(solucao, rota):
 
 def calcularCusto(solucao, rota):
 
-''' Calcula o custo da rota de um carro '''
+    ''' Calcula o custo da rota de um carro '''
 
     custo = 0
     for i in range(1,len(solucao)):
@@ -78,7 +78,7 @@ def calcularCusto(solucao, rota):
 
 def calcularCustoTotal(listaSolucao, rota):
 
-''' Calcula o custo para todos os carros '''
+    ''' Calcula o custo para todos os carros '''
 
     custoTotal = 0
     for lista in listaSolucao:
@@ -88,7 +88,7 @@ def calcularCustoTotal(listaSolucao, rota):
 
 def opt2(solucao, custofinal, rota):
 
-''' Pega 2 casas e coloca na melhor posição possível do vetor '''
+    ''' Pega 2 casas e coloca na melhor posição possível do vetor '''
 
     melhorCusto = custofinal
     melhorSolucao = deepcopy(solucao)
@@ -113,7 +113,7 @@ def opt2(solucao, custofinal, rota):
 
 def reinsertion(solucao, custofinal, rota):
 
-''' Pega uma casa e a coloca na melhor posição possível do vetor '''
+    ''' Pega uma casa e a coloca na melhor posição possível do vetor '''
 
     melhorCusto = custofinal
     melhorSolucao = deepcopy(solucao)
@@ -134,7 +134,7 @@ def reinsertion(solucao, custofinal, rota):
 
 def swap(solucao, custofinal, rota): 
 
-''' Retorna o melhor swap possível da rota '''
+    ''' Retorna o melhor swap possível da rota '''
       
     melhorCusto = custofinal
     melhorSolucao = deepcopy(solucao)
@@ -157,7 +157,7 @@ def swapPositions(list, pos1, pos2):
 
 def swapGeral(listaSolucao, rota):
 
-''' Funções para aplicar as paradas na lista completa de todos os carros '''
+    ''' Funções para aplicar as paradas na lista completa de todos os carros '''
 
     listaAtualizada = []
     for lista in listaSolucao:
@@ -178,10 +178,10 @@ def reinsertionGeral(listaSolucao, rota):
 
 def vnd(listaSolucao, rota): 
 
-'''
- Roda primeiro um reinsertion, repete até não melhorar mais, e depois sobe pra um swap, depois opt2 || volta pro reinsertion sempre que melhorar
+    '''
+    Roda primeiro um reinsertion, repete até não melhorar mais, e depois sobe pra um swap, depois opt2 || volta pro reinsertion sempre que     melhorar
 
-'''
+    '''
 
     listaAuxiliar = deepcopy(listaSolucao)
     custoInicial = calcularCustoTotal(listaSolucao, rota)

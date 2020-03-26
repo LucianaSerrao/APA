@@ -2,14 +2,14 @@ import sys
 
 def ler_arquivo():
 
-       '''
-       Salva cada linha do arquivo em uma lista  (ln 12)
-       Le o arquivo e salva numa lista de string (ln 14 - ln 19)
-       Separa a lista de string em listas específicas (ln 20 - ln 36)
+    '''
+    Salva cada linha do arquivo em uma lista  (ln 12)
+    Le o arquivo e salva numa lista de string (ln 14 - ln 19)
+    Separa a lista de string em listas específicas (ln 20 - ln 36)
+	
+    '''
 
-       '''
 
-    
     listaStrings = []  
                       
     file_name = sys.argv[1]

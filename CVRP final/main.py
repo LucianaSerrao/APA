@@ -1,8 +1,9 @@
-from lerArquivos import *
-from funcoes import *
+from readFile import *
+from functions import *
 from copy import deepcopy
 
-'''         ALGORITMO    
+'''         
+ALGORITMO    
     1. PROCURAR DESTINO
         1.1 PROCURA CASA MAIS PRÓXIMA
         1.2 VER SE É COMPATÍVEL COM A CAPACIDADE RESTANTE DO CARRO
