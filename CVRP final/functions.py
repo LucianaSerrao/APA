@@ -66,7 +66,7 @@ def calcularRota(solucao, rota):
     return valor
 
 
-def calcularCusto(solucao, rota):
+def calcularCusto(solucao, rota):  #tem que ser linear, olhar isso no marcone 
 
     ''' Calcula o custo da rota de um carro '''
 
@@ -164,7 +164,7 @@ def swapGeral(listaSolucao, rota):
         listaAtualizada.append(swap(lista, calcularCusto(lista, rota), rota))
     return listaAtualizada
 
-def opt2Geral(listaSolucao, rota): 
+def opt2Geral(listaSolucao, rota): #olhar o funcionamento porque nao ta realizando nenhum movimento
     listaAtualizada = []
     for lista in listaSolucao:
         listaAtualizada.append(opt2(lista, calcularCusto(lista, rota), rota))
