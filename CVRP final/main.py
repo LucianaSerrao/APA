@@ -17,19 +17,14 @@ ALGORITMO
     3. REPETIR
 '''
 
-#salva o arquivo em uma lista
-arq = ler_arquivo()
-
 #separa os dados dos arquivos em listas específicas
-dados = arq[0]
-casas = arq[1]
-rotas = arq[2]
+dados, rotas, casas = read_file()
 
 #variaveis de controle
 distancia = 0
 carro = 0
 
-#imprimirDadosDoArquivo(dados, casas, rotas)
+imprimirDadosDoArquivo(dados, casas, rotas)
 resto = contarEntregas(casas)
 print ("\n============================================")
 print("             FALTAM {} ENTREGAS".format(resto))

@@ -1,6 +1,6 @@
 import sys
 
-def ler_arquivo():
+def read_file():
 
     '''
     Salva cada linha do arquivo em uma lista  (ln 12)
@@ -54,4 +54,6 @@ def imprimirDadosDoArquivo(Dados, Demanda, Rotas):
     for linha in Rotas:
         print ("{} - {}".format(n, linha))
         n +=1
+    
+    return 0
 
