@@ -1,7 +1,8 @@
 from readFile import *
 from functions import *
 from copy import deepcopy
-
+import time
+import csv
 '''         
 ALGORITMO    
     1. PROCURAR DESTINO
@@ -17,18 +18,20 @@ ALGORITMO
     3. REPETIR
 '''
 
+
+'''         VARIÁVEIS GLOBAIS            '''
+instancias = ["P-n16-k8", "P-n19-k2", "P-n20-k2", "P-n23-k8", "P-n45-k5", "P-n50-k10", "P-n51-k10", "P-n55-k7"]
+custoOtimo = [450, 212, 216, 529, 510, 696, 741, 568]
+
+
+
 #separa os dados dos arquivos em listas específicas
 dados, rotas, casas = read_file()
 
 #variaveis de controle
 distancia = 0
 carro = 0
-
-imprimirDadosDoArquivo(dados, casas, rotas)
 resto = contarEntregas(casas)
-print ("\n============================================")
-print("             FALTAM {} ENTREGAS".format(resto))
-("============================================\n")
 
 '''         
 Entrega de pacotes
@@ -51,6 +54,7 @@ Informa quantos produtos ainda faltam ser entregues (ln 82)
 
 Enderecos = []  
 custoEnderecos = []
+heuristicaTInicio = time.time()
 
 while(resto > 0):     
     carro += 1                                                                                   
@@ -61,11 +65,11 @@ while(resto > 0):
     while(capacidade > 0):                                                                      
         ultimaPosicao = deepcopy(posCarro)                                                       
         posCarro = procurarCasaMaisProxima(rotas, posCarro, casas, capacidade)                   
-        if(posCarro[1] >= 0):                                                                    
+        if(posCarro[1] > 0):                                                                    
             capacidade = atualizarCapacidade(casas, posCarro[1], capacidade)                     
             EnderecosPorCarro.append(deepcopy(posCarro[1]))
             distancia = somarDistancia(distancia, posCarro, rotas)                                        
-            demanda = atualizarDemanda(casas, posCarro[1])                                      
+            atualizarDemanda(casas, posCarro[1])                                      
             aux = deepcopy(posCarro)
             posCarro[0] = aux[1]
             posCarro[1] = aux[0]
@@ -80,6 +84,23 @@ while(resto > 0):
     custoEnderecos.append(deepcopy(custoPorCarro))
     Enderecos.append(deepcopy(EnderecosPorCarro))
 
-melhorTrajeto = vnd(Enderecos, rotas)
 
-print(melhorTrajeto)
+"""                 CALCULO DE DADOS PARA RELATÓRIO FINAL               """
+    heuristicaTFinal = time.time()
+    custoHeuristica = calcularCustoTotal(Enderecos, rotas)
+    VndTInicio = time.time()
+    melhorTrajeto = vnd(Enderecos, rotas)
+    VndTFinal = time.time()
+    custoVND = calcularCustoTotal(melhorTrajeto, rotas)
+    tHeuristica = heuristicaTFinal - heuristicaTInicio
+    tVND = VndTFinal - VndTInicio
+    gapHeuristica = ((custoHeuristica - custoOtimo[indice])/custoOtimo[indice])*100
+    gapVND = ((custoVND - custoOtimo[indice])/custoOtimo[indice])*100
+
+    return [instancias[i], str(custoOtimo[indice]), str(custoHeuristica), str(round(tHeuristica, 4)), str(round(gapHeuristica, 4)), str(custoVND), str(round(tVND, 4)), str(round(gapVND, 4))]
+
+arquivo = csv.writer(open("relatorio2.csv", "w"))
+arquivo.writerow(["nome", "ótimo", "valor solução", "tempo", "gap", "valor solução", "tempo", "gap"])
+
+for i in range(0, len(instancias)):       
+    arquivo.writerow(algoritmo(instancias[i], i))

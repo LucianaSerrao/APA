@@ -55,5 +55,5 @@ def imprimirDadosDoArquivo(Dados, Demanda, Rotas):
         print ("{} - {}".format(n, linha))
         n +=1
     
-    return 0
+    
 

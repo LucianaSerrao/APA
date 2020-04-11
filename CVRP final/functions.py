@@ -73,6 +73,7 @@ def calcularCusto(solucao, rota):  #tem que ser linear, olhar isso no marcone
     custo = 0
     for i in range(1,len(solucao)):
         custo += int(rota[solucao[i-1]][solucao[i]])
+        print(custo)
     return custo
 
 
@@ -98,7 +99,7 @@ def opt2(solucao, custofinal, rota):
             casaAnalisada = deepcopy([copiasolucao[index-1], copiasolucao[index]])
             del copiasolucao[index]
             del copiasolucao[index-1]
-            for n in range(index, len(copiasolucao)-1):            
+            for n in range(1, len(copiasolucao)-1):            
                 copiasolucao.insert(n, casaAnalisada[1])
                 copiasolucao.insert(n, casaAnalisada[0])
                 resultadoParcial = calcularCusto(copiasolucao, rota)   
@@ -122,13 +123,13 @@ def reinsertion(solucao, custofinal, rota):
             copiasolucao = deepcopy(solucao)
             casaAnalisada = deepcopy(copiasolucao[index])
             del copiasolucao[index]        
-            for n in range(index, len(copiasolucao)-1):                        
-                copiasolucao.insert(n+1, casaAnalisada)
+            for n in range(1, len(copiasolucao)-1):                        
+                copiasolucao.insert(n, casaAnalisada)
                 resultadoParcial = calcularCusto(copiasolucao, rota)   
                 if(resultadoParcial < melhorCusto):
                     melhorCusto = resultadoParcial 
                     melhorSolucao = deepcopy(copiasolucao)            
-                del copiasolucao[n+1]
+                del copiasolucao[n]
     return melhorSolucao
 
 
@@ -138,10 +139,10 @@ def swap(solucao, custofinal, rota):
       
     melhorCusto = custofinal
     melhorSolucao = deepcopy(solucao)
+    copiasolucao = deepcopy(solucao)
 
     if(len(solucao)>3):
         for index in range (1, len(solucao)-2):
-            copiasolucao = deepcopy(solucao)
             for n in range(index+1, len(copiasolucao)-1):  
                 copiasolucao = deepcopy(solucao)          
                 copiasolucao = swapPositions(copiasolucao, index, n)
@@ -185,7 +186,6 @@ def vnd(listaSolucao, rota):
 
     listaAuxiliar = deepcopy(listaSolucao)
     custoInicial = calcularCustoTotal(listaSolucao, rota)
-    custoFinal = 0
     k = 1
     while(k <= 3):
         if(k == 1):
