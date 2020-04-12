@@ -1,6 +1,6 @@
 import sys
 
-def read_file():
+def read_file(file_name):
 
     '''
     Salva cada linha do arquivo em uma lista  (ln 12)
@@ -12,7 +12,7 @@ def read_file():
 
     listaStrings = []  
                       
-    file_name = sys.argv[1]
+    #file_name = sys.argv[1]
     with open(file_name, "r") as arq1:
         for linha in arq1:
             listaStrings.append(linha.strip())              

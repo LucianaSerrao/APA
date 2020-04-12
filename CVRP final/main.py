@@ -25,7 +25,7 @@ custoOtimo = [450, 212, 216, 529, 510, 696, 741, 568]
 
 def algoritmo(nome, indice):
     #SALVA O ARQUIVO EM UMA LISTA
-    arq = ler_arquivo(nome)
+    arq = read_file(nome)
 
     #SEPARA DOS DADOS DOS ARQUIVOS EM LISTAS ESPECÍFICAS
     dados = arq[0]
