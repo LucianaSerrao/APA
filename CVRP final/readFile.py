@@ -3,9 +3,9 @@ import sys
 def read_file(file_name):
 
     '''
-    Salva cada linha do arquivo em uma lista  (ln 12)
-    Le o arquivo e salva numa lista de string (ln 14 - ln 19)
-    Separa a lista de string em listas específicas (ln 20 - ln 36)
+    Saves each line of the file in a list (ln 12)
+    Read the file and save it to a string list (ln 14 - ln 19)
+    Separates the string list into specific lists (ln 20 - ln 36)
 	
     '''
 

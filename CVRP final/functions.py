@@ -11,11 +11,11 @@ def deliveryCount(demand):
 def searchNearest(graph, carPosition, place, capacity):
 
     '''
-    Analisa o grafo a partir da linha em que o carro se encontra (ln 23)
-    Procura a casa mais próxima que não seja ela mesma (ln 24)
-    Verifica se a demanda da casa é menor que a capacidade do veículo e se é maior que zero (ln 25)
-    Salva a distância da casa mais próxima (ln 26)
-    Salva a posição da coluna em que o carro se encontra (ln 27)
+    Analyzes the graph from the line the car is on (ln 23)
+    Search for the nearest place(ln 24)
+    Checks whether the place's demand is less than the vehicle's capacity (ln 25)
+    Saves the distance to the nearest place (ln 26)
+    Saves the position of the column the car is in (ln 27)
 
     '''    
     nearest = math.inf                                                                      
@@ -67,7 +67,7 @@ def calcRoute(sol, route):
 
 def calcCost(sol, route):  #tem que ser linear, olhar isso no marcone 
 
-    ''' Calcula o custo da rota de um carro '''
+    ''' Calculates the cost of a car route '''
 
     cost = 0
     for i in range(1,len(sol)):
@@ -78,7 +78,7 @@ def calcCost(sol, route):  #tem que ser linear, olhar isso no marcone
 
 def calcTotalCost(solList, route):
 
-    ''' Calcula o custo para todos os carros '''
+    ''' Calculates the cost for all cars '''
 
     totalCost = 0
     for lista in solList:
@@ -88,7 +88,7 @@ def calcTotalCost(solList, route):
 
 def opt2(sol, finalCost, route):
 
-    ''' Pega 2 casas e coloca na melhor posição possível do vetor '''
+    ''' Take 2 places and trade them for the best possible positions of the vector '''
 
     bestCost = finalCost
     bestSolution = deepcopy(sol)
@@ -113,7 +113,7 @@ def opt2(sol, finalCost, route):
 
 def reinsertion(sol, finalCost, route):
 
-    ''' Pega uma casa e a coloca na melhor posição possível do vetor '''
+    ''' Trade a place for the best possible position of the vector '''
 
     bestCost = finalCost
     bestSolution = deepcopy(sol)
@@ -138,7 +138,7 @@ def swapPositions(list, pos1, pos2):
 
 def swap(sol, finalCost, route): 
 
-    ''' Retorna o melhor swap possível da rota '''
+    ''' Returns the best route swap '''
       
     bestCost = finalCost
     bestSolution = deepcopy(sol)
@@ -159,7 +159,7 @@ def swap(sol, finalCost, route):
 
 def swapGeral(solList, route):
 
-    ''' Funções para aplicar as paradas na lista completa de todos os carros '''
+    ''' Functions to apply stops to the complete list of cars '''
 
     currentList = []  #lista atualizada
     for lista in solList:
@@ -181,7 +181,9 @@ def reinsertionGeral(solList, route):
 def vnd(solList, route): 
 
     '''
-    Roda primeiro um reinsertion, repete até não melhorar mais, e depois sobe pra um swap, depois opt2 || volta pro reinsertion sempre que     melhorar
+    Reinsertion, repeat until it can't get better and then swap it 
+    opt2 
+    reinsertion
 
     '''
 
@@ -198,8 +200,8 @@ def vnd(solList, route):
         finalCost = calcTotalCost(auxList, route)
         if(finalCost < initialCost):
             i = 1
-            print("Otimização : {}".format(i))
-            print("Antes: {} Depois {}".format(initialCost, finalCost))
+            print("Optimization : {}".format(i))
+            print("Before: {} After {}".format(initialCost, finalCost))
             initialCost = finalCost            
         else:            
             i += 1

@@ -3,59 +3,48 @@ from functions import *
 from copy import deepcopy
 import time
 import csv
-'''         
-ALGORITMO    
-    1. PROCURAR DESTINO
-        1.1 PROCURA CASA MAIS PRÓXIMA
-        1.2 VER SE É COMPATÍVEL COM A CAPACIDADE RESTANTE DO CARRO
-            1.2.1 SE FOR FAZ A ENTREGA
-            1.2.2 SE NÃO FOR PROCURA A PRÓXIMA CASA
-            1.2.3 SE NO FIM NÃO HOUVER MAIS CASA COMPATÍVEL VOLTA PARA A EMPRESA SOMANDO A DISTÂNCIA
-    2. FAZER ENTREGA
-        2.1 DIMINUIR CAPACIDADE DO CARRO
-        2.2 COLOCA A DEMANDA DA CASA PARA ZERO
-        2.3 SOMAR DISTÂNCIA PERCORRIDA
-    3. REPETIR
-'''
 
 
-'''         VARIÁVEIS GLOBAIS            '''
+
+
 instances = ["P-n16-k8", "P-n19-k2", "P-n20-k2", "P-n23-k8", "P-n45-k5", "P-n50-k10", "P-n51-k10", "P-n55-k7"]
 custoOtimo = [450, 212, 216, 529, 510, 696, 741, 568]
 
 def main(file, index):
-    #SALVA O ARQUIVO EM UMA LISTA
+    
+    '''
+    Saves the file to a list and separates its data into specific lists.
+    
+    Package delivery
+
+    Contains all routes found by the nearest neighbor // for all cars (ln 56)
+
+    As long as there is a place with demand: add another car, reset the car's exit position, take the capacity straight from the file; (ln 59 - ln 62)
+
+    As long as the car has capacity: save its last position, if there is no other compatible place;
+                                     looks for the position of the nearest place, if there is a place closer, the capacity of the car decreases
+                                     according to the demand that the place requested. (ln 65 - ln 69)
+
+    Sums the total distance traveled and informs that the place does not need more delivery and marks the route as already checked. (ln 71 - ln 76)
+
+    If there is no nearest place, add the distance back to the company. (ln 78 - ln 79)
+
+    Tells you how many products are yet to be delivered (ln 82)   
+
+    '''
+    
     auxFile = read_file(file+'.txt')
 
-    #SEPARA DOS DADOS DOS ARQUIVOS EM LISTAS ESPECÍFICAS
     data = auxFile[0]
     places = auxFile[1]
     route = auxFile[2]
 
 
-    #variaveis de controle
     distance = 0
     car = 0
     resto = deliveryCount(places)
 
-    '''         
-    Entrega de pacotes
 
-    Contem todas as rotas encontradas pelo vizinho mais proximo // para todos os carros (ln 56)
-
-    Enquanto houver casa com demanda: adiciona mais um carro, reseta a posição de saída do carro, pega a capacidade direto do arquivo; (ln 59 - ln 62)
-
-    Enquanto o carro tiver capacidade: salva a ultima posição do carro, caso não haja mais casa compatível; procura a posição da casa mais próxima,
-    se houver casa mais proxima, diminui a capacidade do carro de acordo com a demanda que a casa solicitou. (ln 65 - ln 69)
-
-    Soma a distância total percorrida e informa que a casa não precisa de mais entrega e marca a rota como já percorrida (ln 71 - ln 76)
-
-    Se não houver casa mais próxima, soma a distância de volta para a empresa (ln 78 - ln 79)
-
-    Informa quantos produtos ainda faltam ser entregues (ln 82)
-
-
-    '''
 
     Address = []  
     addressCost = []
@@ -90,7 +79,7 @@ def main(file, index):
         Address.append(deepcopy(adressPerCar))
 
 
-    """                 CALCULO DE DADOS PARA RELATÓRIO FINAL               """
+    # CALCULO DE DADOS PARA TABELA                """
     finalHeurisTime = time.time()
     heurisCost = calcTotalCost(Address, route)
     vndInitialTime = time.time()
