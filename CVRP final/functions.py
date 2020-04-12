@@ -1,14 +1,14 @@
 import math
 from copy import deepcopy
 
-def contarEntregas(demanda):
+def deliveryCount(demand):
     resto = 0
-    for casas in demanda:
-        if (int(casas[1])>0):
-            resto += int(casas[1])
+    for places in demand:
+        if (int(places[1])>0):
+            resto += int(places[1])
     return resto
 
-def procurarCasaMaisProxima(grafo, posCarro, casa, capacidade):
+def searchNearest(graph, carPosition, place, capacity):
 
     '''
     Analisa o grafo a partir da linha em que o carro se encontra (ln 23)
@@ -18,189 +18,190 @@ def procurarCasaMaisProxima(grafo, posCarro, casa, capacidade):
     Salva a posição da coluna em que o carro se encontra (ln 27)
 
     '''    
-    casaMaisProxima = math.inf                                                                      
-    contador = 0                
-    for i in grafo[posCarro[0]]:                                
-        if ((int(i) > 0 ) and (int(i) < casaMaisProxima)):                                  
-            if(int(casa[contador][1]) <= capacidade and int(casa[contador][1]) > 0):                     
-                casaMaisProxima = int(i)                                                    
-                posCarro[1] = contador 
+    nearest = math.inf                                                                      
+    count = 0                
+    for i in graph[carPosition[0]]:                                
+        if ((int(i) > 0 ) and (int(i) < nearest)):                                  
+            if(int(place[count][1]) <= capacity and int(place[count][1]) > 0):                     
+                nearest = int(i)                                                    
+                carPosition[1] = count 
                                                      
-        contador += 1
-    if(casaMaisProxima == float("inf")):
-        posCarro[1] = -1        
-    return posCarro
+        count += 1
+    if(nearest == float("inf")):
+        carPosition[1] = -1        
+    return carPosition
 
-def somarDistancia(distanciaAtual, endereco, rota):
-    x = endereco[0]
-    y = endereco[1]
-    distanciaAtual += int(rota[x][y])
-    return distanciaAtual
+def addDistance(currentDistance, address, route):
+    x = address[0]
+    y = address[1]
+    currentDistance += int(route[x][y])
+    return currentDistance
 
-def atualizarRota(endereco, rota):  
-    x = int(endereco[0])
-    y = int(endereco[1])
-    rota[x][y] = 0    
-    return rota
+# def attRoute(endereco, rota):  
+    # x = int(endereco[0])
+    # y = int(endereco[1])
+    # rota[x][y] = 0    
+    # return rota
 
-def atualizarDemanda(casa, endereco):    
-    casa[endereco][1] = 0    
-    return casa
+def attDemand(place, address):    
+    place[address][1] = 0    
+    return place
 
-def atualizarCapacidade(casa, endereco, capacidade):
-    capacidade -= int(casa[endereco][1])       
-    return capacidade
+def attCapacity(place, address, capacity):
+    capacity -= int(place[address][1])       
+    return capacity
 
-def calcularRota(solucao, rota):
-    valor = 0  
-    n = 0  
-    m = 1
-    posCarro = [0, 0]
-    destino = [n, solucao[m]]
-    for i in solucao:
-        valor += somarDistancia(valor, destino, rota)
-        print("o Valor é {}".format(valor))
-        posCarro = [m,m]
-        m += 1
-        destino = [solucao[m-1], solucao[m]]        
-    return valor
+def calcRoute(sol, route):
+    totalSum = 0  
+    j = 0  
+    k = 1
+    carPosition = [0, 0]
+    destination = [j, sol[k]]
+    for i in sol:
+        totalSum += addDistance(totalSum, destination, route)
+        print("o Valor é {}".format(totalSum))
+        carPosition = [k,k]
+        k += 1
+        destination = [sol[k-1], sol[k]]        
+    return totalSum
 
-
-def calcularCusto(solucao, rota):  #tem que ser linear, olhar isso no marcone 
+def calcCost(sol, route):  #tem que ser linear, olhar isso no marcone 
 
     ''' Calcula o custo da rota de um carro '''
 
-    custo = 0
-    for i in range(1,len(solucao)):
-        custo += int(rota[solucao[i-1]][solucao[i]])
-        print(custo)
-    return custo
+    cost = 0
+    for i in range(1,len(sol)):
+        cost += int(route[sol[i-1]][sol[i]])
+        print(cost)
+    return cost
 
 
-def calcularCustoTotal(listaSolucao, rota):
+def calcTotalCost(solList, route):
 
     ''' Calcula o custo para todos os carros '''
 
-    custoTotal = 0
-    for lista in listaSolucao:
-        custoTotal += calcularCusto(lista, rota)
-    return custoTotal
+    totalCost = 0
+    for lista in solList:
+        totalCost += calcCost(lista, route)
+    return totalCost
     
 
-def opt2(solucao, custofinal, rota):
+def opt2(sol, finalCost, route):
 
     ''' Pega 2 casas e coloca na melhor posição possível do vetor '''
 
-    melhorCusto = custofinal
-    melhorSolucao = deepcopy(solucao)
-    if(len(solucao)>4):
-        for index in range (2, len(solucao)-1):
-            copiasolucao = deepcopy(solucao)
-            casaAnalisada = deepcopy([copiasolucao[index-1], copiasolucao[index]])
-            del copiasolucao[index]
-            del copiasolucao[index-1]
-            for n in range(1, len(copiasolucao)-1):            
-                copiasolucao.insert(n, casaAnalisada[1])
-                copiasolucao.insert(n, casaAnalisada[0])
-                resultadoParcial = calcularCusto(copiasolucao, rota)   
-                if(resultadoParcial < melhorCusto):
-                    melhorCusto = resultadoParcial 
-                    melhorSolucao = deepcopy(copiasolucao)
-                del copiasolucao[n+1]
-                del copiasolucao[n]
-    return melhorSolucao
+    bestCost = finalCost
+    bestSolution = deepcopy(sol)
+    if(len(sol)>4):
+        for index in range (2, len(sol)-1):
+            solutionCopy = deepcopy(sol)
+            checked = deepcopy([solutionCopy[index-1], solutionCopy[index]])
+            del solutionCopy[index]
+            del solutionCopy[index-1]
+            for i in range(1, len(solutionCopy)-1):            
+                solutionCopy.insert(i, checked[1])
+                solutionCopy.insert(i, checked[0])
+                partial = calcCost(solutionCopy, route)   
+                if(partial < bestCost):
+                    bestCost = partial 
+                    bestSolution = deepcopy(solutionCopy)
+                del solutionCopy[i+1]
+                del solutionCopy[i]
+    return bestSolution
 
 
 
-def reinsertion(solucao, custofinal, rota):
+def reinsertion(sol, finalCost, route):
 
     ''' Pega uma casa e a coloca na melhor posição possível do vetor '''
 
-    melhorCusto = custofinal
-    melhorSolucao = deepcopy(solucao)
-    if(len(solucao)>3):
-        for index in range (1, len(solucao)-1):
-            copiasolucao = deepcopy(solucao)
-            casaAnalisada = deepcopy(copiasolucao[index])
-            del copiasolucao[index]        
-            for n in range(1, len(copiasolucao)-1):                        
-                copiasolucao.insert(n, casaAnalisada)
-                resultadoParcial = calcularCusto(copiasolucao, rota)   
-                if(resultadoParcial < melhorCusto):
-                    melhorCusto = resultadoParcial 
-                    melhorSolucao = deepcopy(copiasolucao)            
-                del copiasolucao[n]
-    return melhorSolucao
+    bestCost = finalCost
+    bestSolution = deepcopy(sol)
+    if(len(sol)>3):
+        for index in range (1, len(sol)-1):
+            solutionCopy = deepcopy(sol)
+            checked = deepcopy(solutionCopy[index])
+            del solutionCopy[index]        
+            for i in range(1, len(solutionCopy)-1):                        
+                solutionCopy.insert(i, checked)
+                partial = calcCost(solutionCopy, route)   
+                if(partial < bestCost):
+                    bestCost = partial 
+                    bestSolution = deepcopy(solutionCopy)            
+                del solutionCopy[i]
+    return bestSolution
 
-
-def swap(solucao, custofinal, rota): 
-
-    ''' Retorna o melhor swap possível da rota '''
-      
-    melhorCusto = custofinal
-    melhorSolucao = deepcopy(solucao)
-    copiasolucao = deepcopy(solucao)
-
-    if(len(solucao)>3):
-        for index in range (1, len(solucao)-2):
-            for n in range(index+1, len(copiasolucao)-1):  
-                copiasolucao = deepcopy(solucao)          
-                copiasolucao = swapPositions(copiasolucao, index, n)
-                resultadoParcial = calcularCusto(copiasolucao, rota)   
-                if(resultadoParcial < melhorCusto):
-                    melhorCusto = resultadoParcial 
-                    melhorSolucao = deepcopy(copiasolucao)            
-    return melhorSolucao
 
 def swapPositions(list, pos1, pos2):      
     list[pos1], list[pos2] = list[pos2], list[pos1] 
     return list
 
-def swapGeral(listaSolucao, rota):
+def swap(sol, finalCost, route): 
+
+    ''' Retorna o melhor swap possível da rota '''
+      
+    bestCost = finalCost
+    bestSolution = deepcopy(sol)
+    solutionCopy = deepcopy(sol)
+
+    if(len(sol)>3):
+        for index in range (1, len(sol)-2):
+            for i in range(index+1, len(solutionCopy)-1):  
+                solutionCopy = deepcopy(sol)          
+                solutionCopy = swapPositions(solutionCopy, index, i)
+                partial = calcCost(solutionCopy, route)   
+                if(partial < bestCost):
+                    bestCost = partial 
+                    bestSolution = deepcopy(solutionCopy)            
+    return bestSolution
+
+
+
+def swapGeral(solList, route):
 
     ''' Funções para aplicar as paradas na lista completa de todos os carros '''
 
-    listaAtualizada = []
-    for lista in listaSolucao:
-        listaAtualizada.append(swap(lista, calcularCusto(lista, rota), rota))
-    return listaAtualizada
+    currentList = []  #lista atualizada
+    for lista in solList:
+        currentList.append(swap(lista, calcCost(lista, route), route))
+    return currentList
 
-def opt2Geral(listaSolucao, rota): #olhar o funcionamento porque nao ta realizando nenhum movimento
-    listaAtualizada = []
-    for lista in listaSolucao:
-        listaAtualizada.append(opt2(lista, calcularCusto(lista, rota), rota))
-    return listaAtualizada
+def opt2Geral(solList, route): #olhar o funcionamento porque nao ta realizando nenhum movimento
+    currentList = []
+    for lista in solList:
+        currentList.append(opt2(lista, calcCost(lista, route), route))
+    return currentList
 
-def reinsertionGeral(listaSolucao, rota):
-    listaAtualizada = []
-    for lista in listaSolucao:
-        listaAtualizada.append(reinsertion(lista, calcularCusto(lista, rota), rota))
-    return listaAtualizada
+def reinsertionGeral(solList, route):
+    currentList = []
+    for lista in solList:
+        currentList.append(reinsertion(lista, calcCost(lista, route), route))
+    return currentList
 
-def vnd(listaSolucao, rota): 
+def vnd(solList, route): 
 
     '''
     Roda primeiro um reinsertion, repete até não melhorar mais, e depois sobe pra um swap, depois opt2 || volta pro reinsertion sempre que     melhorar
 
     '''
 
-    listaAuxiliar = deepcopy(listaSolucao)
-    custoInicial = calcularCustoTotal(listaSolucao, rota)
-    k = 1
-    while(k <= 3):
-        if(k == 1):
-            listaAuxiliar = reinsertionGeral(listaAuxiliar, rota)            
-        elif(k == 2):
-            listaAuxiliar = swapGeral(listaAuxiliar, rota)    
-        elif(k == 3):
-            listaAuxiliar = opt2Geral(listaAuxiliar, rota)    
-        custoFinal = calcularCustoTotal(listaAuxiliar, rota)
-        if(custoFinal < custoInicial):
-            k = 1
-            print("otimização encontrada em {}".format(k))
-            print("antes {} depois {}".format(custoInicial, custoFinal))
-            custoInicial = custoFinal            
+    auxList = deepcopy(solList)
+    initialCost = calcTotalCost(solList, route)
+    i = 1
+    while(i <= 3):
+        if(i == 1):
+            auxList = reinsertionGeral(auxList, route)            
+        elif(i == 2):
+            auxList = swapGeral(auxList, route)    
+        elif(i == 3):
+            auxList = opt2Geral(auxList, route)    
+        finalCost = calcTotalCost(auxList, route)
+        if(finalCost < initialCost):
+            i = 1
+            print("Otimização : {}".format(i))
+            print("Antes: {} Depois {}".format(initialCost, finalCost))
+            initialCost = finalCost            
         else:            
-            k += 1
-            print("alterando k= {}".format(k))
-    return listaAuxiliar
+            i += 1
+            print(" i = {}".format(i))
+    return auxList

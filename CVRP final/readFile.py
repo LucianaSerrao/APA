@@ -10,50 +10,34 @@ def read_file(file_name):
     '''
 
 
-    listaStrings = []  
+    stringList = []  
                       
     #file_name = sys.argv[1]
     with open(file_name, "r") as arq1:
-        for linha in arq1:
-            listaStrings.append(linha.strip())              
+        for line in arq1:
+            stringList.append(line.strip())              
 
-    listaDetalhada = []
+    detailedList = []
 
-    for linha in listaStrings:    
-        listaDetalhada.append(linha.split())
+    for line in stringList:    
+        detailedList.append(line.split())
         
-    listaDados = []
-    listaDemanda = []
-    listaGrafo = []
+    dataList = []
+    demandList = []
+    graphList = []
 
     for i in range(0, 4):
-        listaDados.append(listaDetalhada[i])
+        dataList.append(detailedList[i])
     
-    for i in range(4, len(listaDados)+ int(listaDados[1][1])):
-        listaDemanda.append(listaDetalhada[i])
+    for i in range(4, len(dataList)+ int(dataList[1][1])):
+        demandList.append(detailedList[i])
 
-    for i in range(len(listaDados)+len(listaDemanda)+2, len(listaDetalhada)-1):
-        listaGrafo.append(listaDetalhada[i])
+    for i in range(len(dataList)+len(demandList)+2, len(detailedList)-1):
+        graphList.append(detailedList[i])
 
     
-    return (listaDados, listaDemanda, listaGrafo)
+    return (dataList, demandList, graphList)
 
-def imprimirDadosDoArquivo(Dados, Demanda, Rotas):        
-    print("imprimindo Dados:")
-    for linha in Dados:
-        print (linha)
-
-    print("imprimindo Demanda:")
-    n = 1
-    for linha in Demanda:
-        print ("{} - {}".format(n, linha))
-        n+= 1
-
-    print("imprimindo Rotas:")
-    n = 1
-    for linha in Rotas:
-        print ("{} - {}".format(n, linha))
-        n +=1
-    
+ 
     
 

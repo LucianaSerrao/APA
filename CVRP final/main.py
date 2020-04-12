@@ -20,23 +20,23 @@ ALGORITMO
 
 
 '''         VARIÁVEIS GLOBAIS            '''
-instancias = ["P-n16-k8", "P-n19-k2", "P-n20-k2", "P-n23-k8", "P-n45-k5", "P-n50-k10", "P-n51-k10", "P-n55-k7"]
+instances = ["P-n16-k8", "P-n19-k2", "P-n20-k2", "P-n23-k8", "P-n45-k5", "P-n50-k10", "P-n51-k10", "P-n55-k7"]
 custoOtimo = [450, 212, 216, 529, 510, 696, 741, 568]
 
-def algoritmo(nome, indice):
+def main(file, index):
     #SALVA O ARQUIVO EM UMA LISTA
-    arq = read_file(nome)
+    auxFile = read_file(file+'.txt')
 
     #SEPARA DOS DADOS DOS ARQUIVOS EM LISTAS ESPECÍFICAS
-    dados = arq[0]
-    casas = arq[1]
-    rotas = arq[2]
+    data = auxFile[0]
+    places = auxFile[1]
+    route = auxFile[2]
 
 
     #variaveis de controle
-    distancia = 0
-    carro = 0
-    resto = contarEntregas(casas)
+    distance = 0
+    car = 0
+    resto = deliveryCount(places)
 
     '''         
     Entrega de pacotes
@@ -57,55 +57,58 @@ def algoritmo(nome, indice):
 
     '''
 
-    Enderecos = []  
-    custoEnderecos = []
-    heuristicaTInicio = time.time()
+    Address = []  
+    addressCost = []
+    initialHeurisTime = time.time()
 
     while(resto > 0):     
-        carro += 1                                                                                   
-        posCarro = [0, 0]                                
-        capacidade = int(dados[2][1])                   
-        custoPorCarro = 0
-        EnderecosPorCarro = [0]    
-        while(capacidade > 0):                                                                      
-            ultimaPosicao = deepcopy(posCarro)                                                       
-            posCarro = procurarCasaMaisProxima(rotas, posCarro, casas, capacidade)                   
-            if(posCarro[1] > 0):                                                                    
-                capacidade = atualizarCapacidade(casas, posCarro[1], capacidade)                     
-                EnderecosPorCarro.append(deepcopy(posCarro[1]))
-                distancia = somarDistancia(distancia, posCarro, rotas)                                        
-                atualizarDemanda(casas, posCarro[1])                                      
-                aux = deepcopy(posCarro)
-                posCarro[0] = aux[1]
-                posCarro[1] = aux[0]
-                #print(posCarro)                                                                                 
-                custoPorCarro += int(rotas[ultimaPosicao[0]][ultimaPosicao[1]])
+        car += 1                                                                                   
+        carPosition = [0, 0]                                
+        capacity = int(data[2][1])                   
+        carCost = 0
+        adressPerCar = [0]    
+        while(capacity > 0):                                                                      
+            lastPosition = deepcopy(carPosition)                                                       
+            carPosition = searchNearest(route, carPosition, places, capacity)                   
+            if(carPosition[1] > 0):                                                                    
+                capacity = attCapacity(places, carPosition[1], capacity)                     
+                adressPerCar.append(deepcopy(carPosition[1]))
+                distance = addDistance(distance, carPosition, route)                                        
+                attDemand(places, carPosition[1])                                      
+                aux = deepcopy(carPosition)
+                carPosition[0] = aux[1]
+                carPosition[1] = aux[0]
+                #print(carPosition)                                                                                 
+                carCost += int(route[lastPosition[0]][lastPosition[1]])
             else:                                                                                    
-                distancia += int(rotas[ultimaPosicao[0]][ultimaPosicao[1]])                          
-                custoPorCarro += int(rotas[ultimaPosicao[0]][ultimaPosicao[1]])
+                distance += int(route[lastPosition[0]][lastPosition[1]])                          
+                carCost += int(route[lastPosition[0]][lastPosition[1]])
                 break
-        resto = contarEntregas(casas)                                                    
-        EnderecosPorCarro.append(0)            
-        custoEnderecos.append(deepcopy(custoPorCarro))
-        Enderecos.append(deepcopy(EnderecosPorCarro))
+        resto = deliveryCount(places)                                                    
+        adressPerCar.append(0)            
+        addressCost.append(deepcopy(carCost))
+        Address.append(deepcopy(adressPerCar))
 
 
-"""                 CALCULO DE DADOS PARA RELATÓRIO FINAL               """
-    heuristicaTFinal = time.time()
-    custoHeuristica = calcularCustoTotal(Enderecos, rotas)
-    VndTInicio = time.time()
-    melhorTrajeto = vnd(Enderecos, rotas)
-    VndTFinal = time.time()
-    custoVND = calcularCustoTotal(melhorTrajeto, rotas)
-    tHeuristica = heuristicaTFinal - heuristicaTInicio
-    tVND = VndTFinal - VndTInicio
-    gapHeuristica = ((custoHeuristica - custoOtimo[indice])/custoOtimo[indice])*100
-    gapVND = ((custoVND - custoOtimo[indice])/custoOtimo[indice])*100
+    """                 CALCULO DE DADOS PARA RELATÓRIO FINAL               """
+    finalHeurisTime = time.time()
+    heurisCost = calcTotalCost(Address, route)
+    vndInitialTime = time.time()
+    bestRoute = vnd(Address, route)
+    vndFinalTime = time.time()
+    
+    vndCost = calcTotalCost(bestRoute, route)
+    
+    #tHeuristica = finalHeurisTime -initialHeurisTime
+    #tVND = vndFinalTime - vndInitialTime
+    
+    gapHeuristica = ((heurisCost - custoOtimo[index])/custoOtimo[index])*100
+    gapVND = ((vndCost - custoOtimo[index])/custoOtimo[index])*100
 
-    return [instancias[i], str(custoOtimo[indice]), str(custoHeuristica), str(round(tHeuristica, 4)), str(round(gapHeuristica, 4)), str(custoVND), str(round(tVND, 4)), str(round(gapVND, 4))]
+    return [instances[i], str(custoOtimo[index]), str(heurisCost), str(round(finalHeurisTime -initialHeurisTime, 4)), str(round(gapHeuristica, 4)), str(vndCost), str(round(vndFinalTime - vndInitialTime, 4)), str(round(gapVND, 4))]
 
-arquivo = csv.writer(open("relatorio2.csv", "w"))
-arquivo.writerow(["nome", "ótimo", "valor solução", "tempo", "gap", "valor solução", "tempo", "gap"])
+file2 = csv.writer(open("tabela.csv", "w"))
+file2.writerow(["nome", "ótimo", "valor ", "tempo", "gap", "valor", "tempo", "gap"])
 
-for i in range(0, len(instancias)):       
-    arquivo.writerow(algoritmo(instancias[i], i))
+for i in range(0, len(instances)):       
+    file2.writerow(main(instances[i], i))
