@@ -23,66 +23,71 @@ ALGORITMO
 instancias = ["P-n16-k8", "P-n19-k2", "P-n20-k2", "P-n23-k8", "P-n45-k5", "P-n50-k10", "P-n51-k10", "P-n55-k7"]
 custoOtimo = [450, 212, 216, 529, 510, 696, 741, 568]
 
+def algoritmo(nome, indice):
+    #SALVA O ARQUIVO EM UMA LISTA
+    arq = ler_arquivo(nome)
+
+    #SEPARA DOS DADOS DOS ARQUIVOS EM LISTAS ESPECÍFICAS
+    dados = arq[0]
+    casas = arq[1]
+    rotas = arq[2]
 
 
-#separa os dados dos arquivos em listas específicas
-dados, rotas, casas = read_file()
+    #variaveis de controle
+    distancia = 0
+    carro = 0
+    resto = contarEntregas(casas)
 
-#variaveis de controle
-distancia = 0
-carro = 0
-resto = contarEntregas(casas)
+    '''         
+    Entrega de pacotes
 
-'''         
-Entrega de pacotes
+    Contem todas as rotas encontradas pelo vizinho mais proximo // para todos os carros (ln 56)
 
-Contem todas as rotas encontradas pelo vizinho mais proximo // para todos os carros (ln 56)
+    Enquanto houver casa com demanda: adiciona mais um carro, reseta a posição de saída do carro, pega a capacidade direto do arquivo; (ln 59 - ln 62)
 
-Enquanto houver casa com demanda: adiciona mais um carro, reseta a posição de saída do carro, pega a capacidade direto do arquivo; (ln 59 - ln 62)
+    Enquanto o carro tiver capacidade: salva a ultima posição do carro, caso não haja mais casa compatível; procura a posição da casa mais próxima,
+    se houver casa mais proxima, diminui a capacidade do carro de acordo com a demanda que a casa solicitou. (ln 65 - ln 69)
 
-Enquanto o carro tiver capacidade: salva a ultima posição do carro, caso não haja mais casa compatível; procura a posição da casa mais próxima,
-se houver casa mais proxima, diminui a capacidade do carro de acordo com a demanda que a casa solicitou. (ln 65 - ln 69)
+    Soma a distância total percorrida e informa que a casa não precisa de mais entrega e marca a rota como já percorrida (ln 71 - ln 76)
 
-Soma a distância total percorrida e informa que a casa não precisa de mais entrega e marca a rota como já percorrida (ln 71 - ln 76)
+    Se não houver casa mais próxima, soma a distância de volta para a empresa (ln 78 - ln 79)
 
-Se não houver casa mais próxima, soma a distância de volta para a empresa (ln 78 - ln 79)
-
-Informa quantos produtos ainda faltam ser entregues (ln 82)
+    Informa quantos produtos ainda faltam ser entregues (ln 82)
 
 
-'''
+    '''
 
-Enderecos = []  
-custoEnderecos = []
-heuristicaTInicio = time.time()
+    Enderecos = []  
+    custoEnderecos = []
+    heuristicaTInicio = time.time()
 
-while(resto > 0):     
-    carro += 1                                                                                   
-    posCarro = [0, 0]                                
-    capacidade = int(dados[2][1])                   
-    custoPorCarro = 0
-    EnderecosPorCarro = [0]    
-    while(capacidade > 0):                                                                      
-        ultimaPosicao = deepcopy(posCarro)                                                       
-        posCarro = procurarCasaMaisProxima(rotas, posCarro, casas, capacidade)                   
-        if(posCarro[1] > 0):                                                                    
-            capacidade = atualizarCapacidade(casas, posCarro[1], capacidade)                     
-            EnderecosPorCarro.append(deepcopy(posCarro[1]))
-            distancia = somarDistancia(distancia, posCarro, rotas)                                        
-            atualizarDemanda(casas, posCarro[1])                                      
-            aux = deepcopy(posCarro)
-            posCarro[0] = aux[1]
-            posCarro[1] = aux[0]
-            #print(posCarro)                                                                                 
-            custoPorCarro += int(rotas[ultimaPosicao[0]][ultimaPosicao[1]])
-        else:                                                                                    
-            distancia += int(rotas[ultimaPosicao[0]][ultimaPosicao[1]])                          
-            custoPorCarro += int(rotas[ultimaPosicao[0]][ultimaPosicao[1]])
-            break
-    resto = contarEntregas(casas)                                                    
-    EnderecosPorCarro.append(0)            
-    custoEnderecos.append(deepcopy(custoPorCarro))
-    Enderecos.append(deepcopy(EnderecosPorCarro))
+    while(resto > 0):     
+        carro += 1                                                                                   
+        posCarro = [0, 0]                                
+        capacidade = int(dados[2][1])                   
+        custoPorCarro = 0
+        EnderecosPorCarro = [0]    
+        while(capacidade > 0):                                                                      
+            ultimaPosicao = deepcopy(posCarro)                                                       
+            posCarro = procurarCasaMaisProxima(rotas, posCarro, casas, capacidade)                   
+            if(posCarro[1] > 0):                                                                    
+                capacidade = atualizarCapacidade(casas, posCarro[1], capacidade)                     
+                EnderecosPorCarro.append(deepcopy(posCarro[1]))
+                distancia = somarDistancia(distancia, posCarro, rotas)                                        
+                atualizarDemanda(casas, posCarro[1])                                      
+                aux = deepcopy(posCarro)
+                posCarro[0] = aux[1]
+                posCarro[1] = aux[0]
+                #print(posCarro)                                                                                 
+                custoPorCarro += int(rotas[ultimaPosicao[0]][ultimaPosicao[1]])
+            else:                                                                                    
+                distancia += int(rotas[ultimaPosicao[0]][ultimaPosicao[1]])                          
+                custoPorCarro += int(rotas[ultimaPosicao[0]][ultimaPosicao[1]])
+                break
+        resto = contarEntregas(casas)                                                    
+        EnderecosPorCarro.append(0)            
+        custoEnderecos.append(deepcopy(custoPorCarro))
+        Enderecos.append(deepcopy(EnderecosPorCarro))
 
 
 """                 CALCULO DE DADOS PARA RELATÓRIO FINAL               """
